@@ -11,23 +11,39 @@ console.log("MongoDB URI available:", !!process.env.MONGODB_URI);
 console.log("DB_URL available:", !!process.env.DB_URL);
 
 // Debug: Check if we have any database-related env vars
-const envVars = Object.keys(process.env).filter(key => 
-  key.toLowerCase().includes('mongo') || key.toLowerCase().includes('db')
+const envVars = Object.keys(process.env).filter(
+  (key) =>
+    key.toLowerCase().includes("mongo") || key.toLowerCase().includes("db")
 );
 console.log("Database-related env vars:", envVars);
+
+// Debug: Show the actual MONGODB_URI (first 50 chars only for security)
+if (process.env.MONGODB_URI) {
+  console.log(
+    "MONGODB_URI preview:",
+    process.env.MONGODB_URI.substring(0, 50) + "..."
+  );
+  console.log(
+    "MONGODB_URI contains %40:",
+    process.env.MONGODB_URI.includes("%40")
+  );
+}
 
 // Start server first, then try to connect to database
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  
+
   // Try to connect to database after server is running
   connectDB()
     .then(() => {
       console.log("✅ Database connected successfully");
     })
     .catch((err) => {
-      console.error("❌ Database connection failed, but server is still running:", err.message);
+      console.error(
+        "❌ Database connection failed, but server is still running:",
+        err.message
+      );
       console.log("⚠️  Some features may not work without database connection");
     });
 });
