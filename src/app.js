@@ -70,6 +70,22 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Debug endpoint to check environment variables (remove in production)
+app.get("/debug-env", (req, res) => {
+  const hasMongoUri = !!process.env.MONGODB_URI;
+  const hasDbUrl = !!process.env.DB_URL;
+  const mongoUriLength = process.env.MONGODB_URI ? process.env.MONGODB_URI.length : 0;
+  const mongoUriStart = process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 20) + '...' : 'not set';
+  
+  res.json({
+    mongodb_uri_exists: hasMongoUri,
+    db_url_exists: hasDbUrl,
+    mongodb_uri_length: mongoUriLength,
+    mongodb_uri_preview: mongoUriStart,
+    node_env: process.env.NODE_ENV
+  });
+});
+
 app.use("/", authRoute);
 
 app.use("/task", taskRouter);

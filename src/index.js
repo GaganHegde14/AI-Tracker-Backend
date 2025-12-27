@@ -7,6 +7,14 @@ const PORT = process.env.PORT || 3000;
 console.log("Starting server...");
 console.log("Environment:", process.env.NODE_ENV);
 console.log("Port:", PORT);
+console.log("MongoDB URI available:", !!process.env.MONGODB_URI);
+console.log("DB_URL available:", !!process.env.DB_URL);
+
+// Debug: Check if we have any database-related env vars
+const envVars = Object.keys(process.env).filter(key => 
+  key.toLowerCase().includes('mongo') || key.toLowerCase().includes('db')
+);
+console.log("Database-related env vars:", envVars);
 
 // Start server first, then try to connect to database
 app.listen(PORT, () => {

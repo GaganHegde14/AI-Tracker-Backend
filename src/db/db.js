@@ -9,12 +9,19 @@ const connectDB = async()=>{
          throw new Error("Database URL not configured");
       }
       
-      console.log("🔗 Attempting to connect to database...");
+      // Debug: Show connection string format (hide credentials)
+      const maskedUrl = dbUrl.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@');
+      console.log("🔗 Attempting to connect to database:", maskedUrl);
+      console.log("🔗 Connection string length:", dbUrl.length);
+      console.log("🔗 Starts with mongodb+srv:", dbUrl.startsWith('mongodb+srv://'));
+      
+      // No connection options needed for Mongoose 6+
       await mongoose.connect(dbUrl);
       console.log("✅ Database connected successfully");
       
    } catch (error) {
-       console.error("❌ Database connection error:", error.message);
+       console.error("❌ Database connection error:", error);
+       console.error("❌ Full error details:", JSON.stringify(error, null, 2));
        throw error; // Let the caller handle the error
    }
 }
