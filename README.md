@@ -36,22 +36,26 @@ A robust Node.js/Express backend API for the AI Task Manager application with Go
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/GaganHegde14/AI-Tracker-Backend.git
 cd AI-Tracker-Backend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Create environment variables:
+
 ```bash
 cp .env.example .env
 ```
 
 4. Update `.env` with your configurations:
+
 ```env
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/ai-task-manager
@@ -64,6 +68,7 @@ CLIENT_URL=http://localhost:5173
 ```
 
 5. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -71,10 +76,12 @@ npm run dev
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
 
 ### Tasks
+
 - `GET /api/tasks` - Get user tasks
 - `POST /api/tasks` - Create new task
 - `PUT /api/tasks/:id` - Update task
@@ -82,22 +89,26 @@ npm run dev
 - `POST /api/tasks/ai` - AI-powered task creation
 
 ### AI Chat
+
 - `GET /api/ai/chats` - Get chat history
 - `POST /api/ai/chat` - Send message to AI assistant
 - `DELETE /api/ai/chats` - Clear all chats
 
 ### User Management
+
 - `GET /api/user/info` - Get user information
 - `POST /api/user/profile-pic` - Update profile picture
 - `PUT /api/user/password` - Update password
 - `DELETE /api/user/account` - Delete account
 
 ### Support System
+
 - `POST /api/support` - Create support ticket
 - `GET /api/support` - Get user's support tickets
 - `PUT /api/support/:id` - Update support ticket status
 
 ### Leaderboards
+
 - `GET /api/leaderboard/global` - Get global leaderboard
 - `GET /api/leaderboard/friends` - Get friends leaderboard
 - `POST /api/leaderboard/friends/:userId` - Add friend
@@ -106,6 +117,7 @@ npm run dev
 ## Environment Variables
 
 ### Required
+
 - `PORT` - Server port (default: 3000)
 - `MONGODB_URI` - MongoDB connection string
 - `JWT_SECRET` - JWT signing secret
@@ -113,6 +125,7 @@ npm run dev
 - `CLIENT_URL` - Frontend URL for CORS
 
 ### Optional (Cloudinary)
+
 - `CLOUDINARY_CLOUD_NAME` - Cloudinary cloud name
 - `CLOUDINARY_API_KEY` - Cloudinary API key
 - `CLOUDINARY_API_SECRET` - Cloudinary API secret
@@ -120,6 +133,7 @@ npm run dev
 ## Database Models
 
 ### User Schema
+
 ```javascript
 {
   name: String,
@@ -134,6 +148,7 @@ npm run dev
 ```
 
 ### Task Schema
+
 ```javascript
 {
   title: String,
@@ -150,6 +165,7 @@ npm run dev
 ```
 
 ### AI Chat Schema
+
 ```javascript
 {
   userId: ObjectId,
@@ -160,6 +176,7 @@ npm run dev
 ```
 
 ### Support Schema
+
 ```javascript
 {
   userId: ObjectId,
@@ -176,11 +193,13 @@ npm run dev
 ## AI Integration
 
 The application uses Google Gemini AI for:
+
 - **Smart Task Creation**: Convert natural language into structured tasks
 - **AI Assistant**: Provide task management advice and insights
 - **Chat Functionality**: Maintain conversation history and context
 
 ### AI Prompts
+
 - Task creation prompts in `/src/utils/aiPrompt.js`
 - Assistant prompts in `/src/utils/aiAssistantPrompt.js`
 
@@ -194,6 +213,7 @@ The application uses Google Gemini AI for:
 4. Start command: `npm start`
 
 ### Environment Setup for Production
+
 ```env
 NODE_ENV=production
 MONGODB_URI=your-mongodb-atlas-connection-string
