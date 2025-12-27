@@ -3,6 +3,7 @@ import taskRouter from "./routes/task.route.js";
 import authRoute from "./routes/auth.route.js";
 import supportRoute from "./routes/support.route.js";
 import cors from "cors";
+import mongoose from "mongoose";
 
 const app = express();
 
@@ -48,11 +49,24 @@ app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get("/health", (req, res) => {
+  const dbStatus = mongoose.connection.readyState;
+  const dbStates = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting'
+  };
+
   res.json({
     status: "OK",
     message: "AI Tracker Backend is running",
     timestamp: new Date().toISOString(),
     cors: "enabled",
+    database: {
+      status: dbStates[dbStatus] || 'unknown',
+      readyState: dbStatus
+    },
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
