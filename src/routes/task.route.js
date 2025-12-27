@@ -11,6 +11,13 @@ import { deleteAllChatController } from "../controllers/Ai_Chats_controllers/del
 
 const taskRouter = express.Router();
 
+// Debug middleware to log all requests to task routes
+taskRouter.use((req, res, next) => {
+  console.log(`📋 Task route accessed: ${req.method} ${req.path}`);
+  console.log(`📋 Authorization header:`, req.headers.authorization ? 'Present' : 'Missing');
+  next();
+});
+
 taskRouter.post("/addTask", authMiddleware, addTaskController);
 
 taskRouter.get("/getTask", authMiddleware, getTaskController);
