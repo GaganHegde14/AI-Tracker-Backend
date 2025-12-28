@@ -4,7 +4,7 @@ export const getTaskController = async (req, res) => {
   try {
     console.log(`📋 getTaskController called`);
     console.log(`📋 req.user:`, req.user);
-    
+
     if (!req.user) {
       console.log(`📋 No user found in request`);
       return res.status(401).json({ message: "Not Authorized" });

@@ -51,10 +51,10 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/health", (req, res) => {
   const dbStatus = mongoose.connection.readyState;
   const dbStates = {
-    0: 'disconnected',
-    1: 'connected',
-    2: 'connecting',
-    3: 'disconnecting'
+    0: "disconnected",
+    1: "connected",
+    2: "connecting",
+    3: "disconnecting",
   };
 
   res.json({
@@ -63,10 +63,10 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
     cors: "enabled",
     database: {
-      status: dbStates[dbStatus] || 'unknown',
-      readyState: dbStatus
+      status: dbStates[dbStatus] || "unknown",
+      readyState: dbStatus,
     },
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || "development",
   });
 });
 
@@ -74,15 +74,19 @@ app.get("/health", (req, res) => {
 app.get("/debug-env", (req, res) => {
   const hasMongoUri = !!process.env.MONGODB_URI;
   const hasDbUrl = !!process.env.DB_URL;
-  const mongoUriLength = process.env.MONGODB_URI ? process.env.MONGODB_URI.length : 0;
-  const mongoUriStart = process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 20) + '...' : 'not set';
-  
+  const mongoUriLength = process.env.MONGODB_URI
+    ? process.env.MONGODB_URI.length
+    : 0;
+  const mongoUriStart = process.env.MONGODB_URI
+    ? process.env.MONGODB_URI.substring(0, 20) + "..."
+    : "not set";
+
   res.json({
     mongodb_uri_exists: hasMongoUri,
     db_url_exists: hasDbUrl,
     mongodb_uri_length: mongoUriLength,
     mongodb_uri_preview: mongoUriStart,
-    node_env: process.env.NODE_ENV
+    node_env: process.env.NODE_ENV,
   });
 });
 

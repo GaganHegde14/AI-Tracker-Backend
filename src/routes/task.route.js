@@ -14,7 +14,10 @@ const taskRouter = express.Router();
 // Debug middleware to log all requests to task routes
 taskRouter.use((req, res, next) => {
   console.log(`📋 Task route accessed: ${req.method} ${req.path}`);
-  console.log(`📋 Authorization header:`, req.headers.authorization ? 'Present' : 'Missing');
+  console.log(
+    `📋 Authorization header:`,
+    req.headers.authorization ? "Present" : "Missing"
+  );
   next();
 });
 

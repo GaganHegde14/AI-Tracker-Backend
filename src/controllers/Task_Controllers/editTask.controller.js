@@ -3,11 +3,18 @@ import { User } from "../../models/user.model.js";
 
 export const editTaskController = async (req, res) => {
   try {
+    console.log("🔄 Edit task controller called");
+    console.log("Request body:", req.body);
+    console.log("Request params:", req.params);
+    console.log("User ID:", req.user._id);
+
     if (!req.user) {
+      console.log("❌ No user found in request");
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     if (!req.params.id) {
+      console.log("❌ No task ID provided");
       return res.status(400).json({ message: "Task ID is required" });
     }
     const {
@@ -21,14 +28,37 @@ export const editTaskController = async (req, res) => {
       status,
     } = req.body;
 
+    console.log("📋 Extracted fields:", {
+      title: !!title,
+      description: !!description,
+      dueDate: !!dueDate,
+      priority: !!priority,
+      steps: !!steps,
+      timeEstimate: !!timeEstimate,
+      status,
+      stepsLength: steps?.length
+    });
+
     if (
       !title ||
       !description ||
       !dueDate ||
       !priority ||
       !steps ||
+      !Array.isArray(steps) ||
       !timeEstimate
     ) {
+      console.log("❌ Missing required fields");
+      console.log("Field check results:", {
+        title: !!title,
+        description: !!description,
+        dueDate: !!dueDate,
+        priority: !!priority,
+        steps: !!steps,
+        stepsIsArray: Array.isArray(steps),
+        stepsLength: steps?.length,
+        timeEstimate: !!timeEstimate
+      });
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -83,7 +113,13 @@ export const editTaskController = async (req, res) => {
           user.level = newLevel;
           await user.save();
 
-          console.log(`🎉 User ${user.username} completed a task! Level: ${newLevel}, Tasks: ${user.tasksCompleted}, Leveled up: ${newLevel > previousLevel}`);
+          console.log(
+            `🎉 User ${
+              user.username
+            } completed a task! Level: ${newLevel}, Tasks: ${
+              user.tasksCompleted
+            }, Leveled up: ${newLevel > previousLevel}`
+          );
         }
       } catch (levelError) {
         console.error("Error updating user level:", levelError);
@@ -93,7 +129,8 @@ export const editTaskController = async (req, res) => {
 
     res.status(200).json({ message: "Task updated successfully" });
   } catch (error) {
-    console.log(error);
+    console.error("❌ Edit task controller error:", error);
+    console.error("Error stack:", error.stack);
     res.status(500).json({ message: "Internal server error" });
   }
 };
