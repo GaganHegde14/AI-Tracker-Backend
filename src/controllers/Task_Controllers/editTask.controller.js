@@ -36,7 +36,7 @@ export const editTaskController = async (req, res) => {
       steps: !!steps,
       timeEstimate: !!timeEstimate,
       status,
-      stepsLength: steps?.length
+      stepsLength: steps?.length,
     });
 
     if (
@@ -57,7 +57,7 @@ export const editTaskController = async (req, res) => {
         steps: !!steps,
         stepsIsArray: Array.isArray(steps),
         stepsLength: steps?.length,
-        timeEstimate: !!timeEstimate
+        timeEstimate: !!timeEstimate,
       });
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -78,6 +78,15 @@ export const editTaskController = async (req, res) => {
     const isNowCompleted = status === "completed";
     const justCompleted = !wasCompleted && isNowCompleted;
 
+    console.log("📋 Task update details:", {
+      taskId: task._id,
+      wasCompleted,
+      isNowCompleted,
+      justCompleted,
+      oldStatus: task.status,
+      newStatus: status,
+    });
+
     task.title = title;
     task.description = description;
     task.dueDate = dueDate;
@@ -87,7 +96,15 @@ export const editTaskController = async (req, res) => {
     task.improvedText = improvedText;
     task.status = status;
 
-    await task.save();
+    console.log("💾 About to save task...");
+    try {
+      await task.save();
+      console.log("✅ Task saved successfully!");
+    } catch (saveError) {
+      console.error("❌ Task save error:", saveError);
+      console.error("Task save error stack:", saveError.stack);
+      throw saveError; // Re-throw to be caught by main catch block
+    }
 
     // If task was just completed, increment user's completed tasks and update level
     if (justCompleted) {
