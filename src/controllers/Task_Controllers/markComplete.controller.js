@@ -30,22 +30,24 @@ export const markCompleteController = async (req, res) => {
     // Check authorization
     if (!task.user || task.user.toString() !== req.user._id.toString()) {
       console.log("❌ User not authorized for this task");
-      return res.status(401).json({ message: "You are not authorized to edit this task" });
+      return res
+        .status(401)
+        .json({ message: "You are not authorized to edit this task" });
     }
 
     // Check if already completed
-    if (task.status === "completed") {
+    if (task.status === "Completed") {
       console.log("⚠️ Task already completed");
-      return res.status(200).json({ 
+      return res.status(200).json({
         message: "Task already completed",
-        alreadyCompleted: true 
+        alreadyCompleted: true,
       });
     }
 
     // Mark as completed
     console.log("✅ Marking task as completed...");
-    task.status = "completed";
-    
+    task.status = "Completed";  // Use correct enum value with capital C
+
     console.log("💾 Saving task...");
     await task.save();
     console.log("✅ Task saved successfully!");
@@ -54,12 +56,12 @@ export const markCompleteController = async (req, res) => {
     try {
       console.log("📈 Updating user level...");
       const user = await User.findById(req.user._id);
-      
+
       if (user) {
         console.log("Current user stats:", {
           username: user.username || user.email,
           level: user.level || 0,
-          tasksCompleted: user.tasksCompleted || 0
+          tasksCompleted: user.tasksCompleted || 0,
         });
 
         // Increment tasks completed
@@ -89,7 +91,7 @@ export const markCompleteController = async (req, res) => {
           tasksCompleted: user.tasksCompleted,
           newLevel,
           previousLevel,
-          leveledUp: newLevel > previousLevel
+          leveledUp: newLevel > previousLevel,
         });
       } else {
         console.log("❌ User not found for level update");
@@ -100,11 +102,10 @@ export const markCompleteController = async (req, res) => {
     }
 
     console.log("🎉 Mark complete operation successful!");
-    res.status(200).json({ 
+    res.status(200).json({
       message: "Task marked as completed successfully",
-      success: true
+      success: true,
     });
-
   } catch (error) {
     console.error("❌ Mark complete error:", error);
     console.error("Error stack:", error.stack);
