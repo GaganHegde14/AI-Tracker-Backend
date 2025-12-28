@@ -4,6 +4,7 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 import { getTaskController } from "../controllers/Task_Controllers/getTask.controller.js";
 import { deleteTaskController } from "../controllers/Task_Controllers/deleteTask.controller.js";
 import { editTaskController } from "../controllers/Task_Controllers/editTask.controller.js";
+import { markCompleteController } from "../controllers/Task_Controllers/markComplete.controller.js";
 import { addTaskAiController } from "../controllers/Ai_Controllers/addTaskAiController.js";
 import { aiAssistantController } from "../controllers/Ai_Controllers/aiAssistant.controller.js";
 import { getAllChatController } from "../controllers/Ai_Chats_controllers/getAllChat.controller.js";
@@ -26,6 +27,9 @@ taskRouter.post("/addTask", authMiddleware, addTaskController);
 taskRouter.get("/getTask", authMiddleware, getTaskController);
 
 taskRouter.put("/edit/:id", authMiddleware, editTaskController);
+
+// New simplified route for marking tasks complete
+taskRouter.put("/complete/:id", authMiddleware, markCompleteController);
 
 taskRouter.delete("/deleteTask/:id", authMiddleware, deleteTaskController);
 
