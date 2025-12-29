@@ -89,42 +89,20 @@ export const registerController = async (req, res) => {
     }
 
     await user.save();
-    console.log("📋 User saved to database");
 
-    // Send OTP email with error handling
-    console.log("📤 Starting email send process...");
-    let emailResult;
-    try {
-      emailResult = await sendOTPEmail(email, otp, name);
-      console.log("📧 Email result:", emailResult);
-    } catch (emailError) {
-      console.error("❌ Email sending failed:", emailError);
-      emailResult = { success: false, error: emailError.message };
-    }
+    // Skip email verification for now - direct registration
+    user.isEmailVerified = true; // Mark as verified
+    await user.save();
 
-    if (!emailResult.success) {
-      console.log("❌ Email failed, but continuing without deleting user for debugging");
-      // Don't delete user for debugging - just continue
-      console.log("🚨 EMAIL FAILED BUT PROCEEDING:", emailResult.error);
-    } else {
-      console.log("✅ Email sent successfully");
-    }
-
-    console.log("✅ Email sent successfully, preparing response");
-
-    // SAFETY CHECK: NEVER send token in registration response
     const response = {
-      message:
-        "Registration initiated! Please check your email for verification code.",
+      message: "Registration successful! You can now log in.",
       userId: user._id,
       email: email,
-      requiresVerification: true,
-      type: "otp_sent",
+      requiresVerification: false,
+      type: "registration_complete",
     };
 
-    console.log("📤 Sending response to client:", response);
     res.status(200).json(response);
-    console.log("✅ Response sent successfully");
   } catch (error) {
     console.error("Registration error:", error);
 

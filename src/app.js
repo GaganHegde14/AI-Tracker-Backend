@@ -34,14 +34,6 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging middleware
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-  console.log("Headers:", req.headers);
-  console.log("Origin:", req.get("origin"));
-  next();
-});
-
 // Health check endpoint
 app.get("/health", (req, res) => {
   const dbStatus = mongoose.connection.readyState;
