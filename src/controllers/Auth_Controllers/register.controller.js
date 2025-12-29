@@ -193,11 +193,17 @@ export const verifyOTPController = async (req, res) => {
 
     await user.save();
 
-    // Create JWT token
-    const token = await user.createJWT();
+    // Create JWT token for automatic login
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "10d",
+    });
 
-    // Send welcome email
-    await sendWelcomeEmail(user.email, user.name);
+    // Send welcome email (optional, don't block if it fails)
+    try {
+      await sendWelcomeEmail(user.email, user.name);
+    } catch (emailError) {
+      console.log("Welcome email failed, but continuing:", emailError.message);
+    }
 
     res.status(200).json({
       message: "Email verified successfully! Welcome to AI Task Manager!",
