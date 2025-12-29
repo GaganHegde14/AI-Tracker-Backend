@@ -74,8 +74,8 @@ export const editTaskController = async (req, res) => {
     }
 
     // Check if task is being marked as completed for the first time
-    const wasCompleted = task.status === "Completed";  // Use correct enum value
-    const isNowCompleted = status === "Completed";     // Use correct enum value
+    const wasCompleted = task.status === "Completed"; // Use correct enum value
+    const isNowCompleted = status === "Completed"; // Use correct enum value
     const justCompleted = !wasCompleted && isNowCompleted;
 
     console.log("📋 Task update details:", {

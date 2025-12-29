@@ -4,10 +4,14 @@ import connectDB from "./db/db.js";
 
 const PORT = process.env.PORT || 3000;
 
-console.log("Starting server...");
+console.log("🚀 Server starting...");
 console.log("Environment:", process.env.NODE_ENV);
 console.log("Port:", PORT);
 console.log("MongoDB URI available:", !!process.env.MONGODB_URI);
+console.log(
+  "Email service configured:",
+  !!process.env.EMAIL_USER && !!process.env.EMAIL_PASS
+);
 console.log("DB_URL available:", !!process.env.DB_URL);
 
 // Debug: Check if we have any database-related env vars

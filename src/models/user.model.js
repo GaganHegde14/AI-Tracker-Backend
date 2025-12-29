@@ -37,6 +37,22 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailOTP: {
+      type: String,
+      default: null,
+    },
+    otpExpiresAt: {
+      type: Date,
+      default: null,
+    },
+    tempUserData: {
+      type: Object,
+      default: null,
+    },
     token: [
       {
         token: {
