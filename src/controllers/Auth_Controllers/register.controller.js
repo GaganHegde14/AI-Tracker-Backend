@@ -91,25 +91,24 @@ export const registerController = async (req, res) => {
 
     await user.save();
 
-    // Skip email verification for now - direct registration
-    user.isEmailVerified = true; // Mark as verified
-    await user.save();
+    // Send OTP email
+    const emailResult = await sendOTPEmail(email, otp, name);
 
-    // Generate JWT token for automatic login
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "10d",
-    });
+    if (!emailResult.success) {
+      // Delete user if email fails
+      await User.findByIdAndDelete(user._id);
+      return res.status(500).json({
+        message: "Failed to send verification email. Please try again.",
+        type: "email_failed",
+      });
+    }
 
     const response = {
-      message: "Registration successful! Welcome to AI Task Manager!",
-      token: token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        profilePic: user.profilePic,
-      },
-      type: "registration_complete_with_login",
+      message: "Registration initiated! Please check your email for verification code.",
+      userId: user._id,
+      email: email,
+      requiresVerification: true,
+      type: "otp_sent",
     };
 
     res.status(200).json(response);
