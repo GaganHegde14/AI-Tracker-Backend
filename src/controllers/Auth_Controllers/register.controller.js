@@ -91,19 +91,23 @@ export const registerController = async (req, res) => {
     await user.save();
     console.log("📋 User saved to database");
 
-    // Send OTP email
+    // Send OTP email with error handling
     console.log("📤 Starting email send process...");
-    const emailResult = await sendOTPEmail(email, otp, name);
-    console.log("📧 Email result:", emailResult);
+    let emailResult;
+    try {
+      emailResult = await sendOTPEmail(email, otp, name);
+      console.log("📧 Email result:", emailResult);
+    } catch (emailError) {
+      console.error("❌ Email sending failed:", emailError);
+      emailResult = { success: false, error: emailError.message };
+    }
 
     if (!emailResult.success) {
-      console.log("❌ Email failed, deleting user");
-      // Delete user if email fails
-      await User.findByIdAndDelete(user._id);
-      return res.status(500).json({
-        message: "Failed to send verification email. Please try again.",
-        type: "email_failed",
-      });
+      console.log("❌ Email failed, but continuing without deleting user for debugging");
+      // Don't delete user for debugging - just continue
+      console.log("🚨 EMAIL FAILED BUT PROCEEDING:", emailResult.error);
+    } else {
+      console.log("✅ Email sent successfully");
     }
 
     console.log("✅ Email sent successfully, preparing response");
