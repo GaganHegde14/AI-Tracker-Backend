@@ -70,6 +70,21 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Root endpoint
+app.get("/", (req, res) => {
+  res.json({
+    message: "🚀 AI Tracker Backend API",
+    version: "1.0.0",
+    status: "running",
+    endpoints: {
+      health: "/health",
+      auth: "/auth",
+      tasks: "/task",
+      support: "/support"
+    }
+  });
+});
+
 // Debug endpoint to check environment variables (remove in production)
 app.get("/debug-env", (req, res) => {
   const hasMongoUri = !!process.env.MONGODB_URI;

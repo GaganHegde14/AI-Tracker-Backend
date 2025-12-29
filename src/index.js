@@ -34,7 +34,7 @@ if (process.env.MONGODB_URI) {
 }
 
 // Start server first, then try to connect to database
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
 
