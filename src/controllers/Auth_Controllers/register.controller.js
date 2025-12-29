@@ -37,9 +37,6 @@ export const registerController = async (req, res) => {
         type: "domain_not_allowed",
       });
     }
-        type: "domain_not_allowed",
-      });
-    }
 
     // Validate password length
     if (password.length < 6) {
