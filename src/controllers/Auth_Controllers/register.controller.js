@@ -104,7 +104,8 @@ export const registerController = async (req, res) => {
     }
 
     const response = {
-      message: "Registration initiated! Please check your email for verification code.",
+      message:
+        "Registration initiated! Please check your email for verification code.",
       userId: user._id,
       email: email,
       requiresVerification: true,
