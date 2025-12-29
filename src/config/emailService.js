@@ -43,7 +43,7 @@ export const generateOTP = () => {
 export const sendOTPEmail = async (email, otp, userName) => {
   try {
     const transporter = createTransporter();
-    
+
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,

@@ -9,33 +9,20 @@ const app = express();
 
 app.use(express.json());
 
-// Enhanced CORS configuration for production
+// Simple CORS configuration for production
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (mobile apps, etc.)
-      if (!origin) return callback(null, true);
-
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:5173",
-        "https://ai-progress.vercel.app",
-        process.env.CLIENT_URL,
-      ].filter(Boolean);
-
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.log("CORS blocked origin:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000", 
+      "http://127.0.0.1:5173",
+      "https://ai-progress.vercel.app"
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
-      "Authorization",
+      "Authorization", 
       "X-Requested-With",
       "Accept",
       "Origin",
@@ -46,6 +33,14 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true }));
+
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  console.log('Headers:', req.headers);
+  console.log('Origin:', req.get('origin'));
+  next();
+});
 
 // Health check endpoint
 app.get("/health", (req, res) => {
@@ -80,8 +75,8 @@ app.get("/", (req, res) => {
       health: "/health",
       auth: "/auth",
       tasks: "/task",
-      support: "/support"
-    }
+      support: "/support",
+    },
   });
 });
 
