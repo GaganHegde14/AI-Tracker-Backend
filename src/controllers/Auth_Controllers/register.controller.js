@@ -1,5 +1,6 @@
 import { User } from "../../models/user.model.js";
 import { hashPassword } from "../../utils/hashPassword.util.js";
+import jwt from "jsonwebtoken";
 import {
   isEmailDomainAllowed,
   generateOTP,
@@ -94,12 +95,21 @@ export const registerController = async (req, res) => {
     user.isEmailVerified = true; // Mark as verified
     await user.save();
 
+    // Generate JWT token for automatic login
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "10d",
+    });
+
     const response = {
-      message: "Registration successful! You can now log in.",
-      userId: user._id,
-      email: email,
-      requiresVerification: false,
-      type: "registration_complete",
+      message: "Registration successful! Welcome to AI Task Manager!",
+      token: token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePic: user.profilePic,
+      },
+      type: "registration_complete_with_login",
     };
 
     res.status(200).json(response);
