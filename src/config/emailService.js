@@ -77,7 +77,14 @@ export const sendOTPEmail = async (email, otp, userName) => {
     };
 
     console.log("📤 Sending email...");
-    const result = await transporter.sendMail(mailOptions);
+    
+    // Add timeout to email sending
+    const emailPromise = transporter.sendMail(mailOptions);
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Email timeout after 30 seconds')), 30000)
+    );
+    
+    const result = await Promise.race([emailPromise, timeoutPromise]);
     console.log("✅ Email sent successfully:", result.messageId);
     return { success: true, messageId: result.messageId };
   } catch (error) {

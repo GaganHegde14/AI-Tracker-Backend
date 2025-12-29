@@ -89,11 +89,15 @@ export const registerController = async (req, res) => {
     }
 
     await user.save();
+    console.log("📋 User saved to database");
 
     // Send OTP email
+    console.log("📤 Starting email send process...");
     const emailResult = await sendOTPEmail(email, otp, name);
+    console.log("📧 Email result:", emailResult);
 
     if (!emailResult.success) {
+      console.log("❌ Email failed, deleting user");
       // Delete user if email fails
       await User.findByIdAndDelete(user._id);
       return res.status(500).json({
@@ -101,6 +105,8 @@ export const registerController = async (req, res) => {
         type: "email_failed",
       });
     }
+
+    console.log("✅ Email sent successfully, preparing response");
 
     // SAFETY CHECK: NEVER send token in registration response
     const response = {
@@ -112,7 +118,9 @@ export const registerController = async (req, res) => {
       type: "otp_sent",
     };
 
+    console.log("📤 Sending response to client:", response);
     res.status(200).json(response);
+    console.log("✅ Response sent successfully");
   } catch (error) {
     console.error("Registration error:", error);
 
