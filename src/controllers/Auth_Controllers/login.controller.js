@@ -20,16 +20,6 @@ export const loginController = async (req, res) => {
       });
     }
 
-    // Check if email is verified
-    if (!user.isEmailVerified) {
-      return res.status(403).json({
-        message: "Please verify your email address before logging in",
-        type: "email_not_verified",
-        userId: user._id,
-        requiresVerification: true,
-      });
-    }
-
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
       return res.status(401).json({

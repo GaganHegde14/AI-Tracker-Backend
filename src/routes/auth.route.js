@@ -1,9 +1,5 @@
 import express from "express";
-import {
-  registerController,
-  verifyOTPController,
-  resendOTPController,
-} from "../controllers/Auth_Controllers/register.controller.js";
+import { registerController } from "../controllers/Auth_Controllers/register.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import { loginController } from "../controllers/Auth_Controllers/login.controller.js";
 import { updatePasswordController } from "../controllers/User_Controllers/updatePassword.controller.js";
@@ -25,8 +21,6 @@ authRoute.get("/", (req, res) => {
 
 // Authentication routes
 authRoute.post("/register", registerController);
-authRoute.post("/verify-otp", verifyOTPController);
-authRoute.post("/resend-otp", resendOTPController);
 authRoute.post("/login", loginController);
 
 authRoute.get("/userinfo", authMiddleware, userInfoController);

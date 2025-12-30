@@ -10,7 +10,7 @@ console.log("Port:", PORT);
 console.log("MongoDB URI available:", !!process.env.MONGODB_URI);
 console.log(
   "Email service configured:",
-  !!process.env.EMAIL_USER && !!process.env.EMAIL_PASS
+  !!process.env.EMAIL_HOST && !!process.env.EMAIL_PASS
 );
 console.log("DB_URL available:", !!process.env.DB_URL);
 
